@@ -6,6 +6,6 @@ pipelines:
         clone:
           enabled: false
         script:
-          - git clone --mirror https://x-token-auth:"$BITBUCKET_VARIABLE"@bitbucket.org/your-bitbucket-repo.git  # Replace with your Bitbucket repository path
-          - cd your-bitbucket-repo.git  # Replace with your repository name
-          - git push --mirror https://x-token-auth:"$GITHUB_VARIABLE"@github.com/your-github-repo.git  # Replace with your GitHub repository path
+          - git clone --mirror https://x-token-auth:"$BITBUCKET_VARIABLE"@bitbucket.org/testingworkspace32/testrepo1.git
+          - cd testrepo1.git
+          - git push --mirror https://x-token-auth:"$GITHUB_VARIABLE"@github.com/manu28042023/test-repo.git
