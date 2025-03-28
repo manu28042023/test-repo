@@ -1,0 +1,11 @@
+pipelines:
+  default:
+    - step:
+        name: Sync GitHub Mirror
+        image: alpine/git:latest
+        clone:
+          enabled: false
+        script:
+          - git clone --mirror https://x-token-auth:"$BITBUCKET_VARIABLE"@bitbucket.org/your-bitbucket-repo.git  # Replace with your Bitbucket repository path
+          - cd your-bitbucket-repo.git  # Replace with your repository name
+          - git push --mirror https://x-token-auth:"$GITHUB_VARIABLE"@github.com/your-github-repo.git  # Replace with your GitHub repository path
