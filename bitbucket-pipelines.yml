@@ -6,6 +6,7 @@ pipelines:
         clone:
           enabled: false
         script:
-          - git clone --mirror https://x-token-auth:"$BITBUCKET_VARIABLE"@bitbucket.org/testingworkspace32/testrepo1.git
+          - git clone --bare https://x-token-auth:"$BITBUCKET_VARIABLE"@bitbucket.org/testingworkspace32/testrepo1.git
           - cd testrepo1.git
-          - git push --mirror https://x-token-auth:"$GITHUB_VARIABLE"@github.com/manu28042023/test-repo.git
+          - git push --force --all https://x-token-auth:"$GITHUB_VARIABLE"@github.com/manu28042023/test-repo.git
+          - git push --force --tags https://x-token-auth:"$GITHUB_VARIABLE"@github.com/manu28042023/test-repo.git
