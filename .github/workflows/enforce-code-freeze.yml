@@ -1,0 +1,37 @@
+name: Enforce Code Freeze (Shell)
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  shell-freeze-check:
+    if: ${{ vars.CODE_FREEZE == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up GH CLI
+        run: echo "Using GitHub CLI with token"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check and enforce freeze
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Target branch is $BASE_BRANCH"
+          if [[ "$BASE_BRANCH" == "main" || "$BASE_BRANCH" == release* ]]; then
+            echo "🚫 Code freeze active on $BASE_BRANCH. Closing PR #$PR_NUMBER"
+
+            gh pr comment "$PR_NUMBER" \
+              --repo "$REPO" \
+              --body "🚫 Code freeze is in effect for branch \`$BASE_BRANCH\`. This PR cannot be merged right now."
+
+            gh pr close "$PR_NUMBER" --repo "$REPO"
+            exit 1  # fail the workflow to enforce blocking
+          else
+            echo "Branch is not frozen, skipping."
+          fi
