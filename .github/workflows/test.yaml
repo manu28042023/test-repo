@@ -1,0 +1,27 @@
+name: Save secret "test" to .env
+on:
+  workflow_dispatch:
+
+jobs:
+  save-secret:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Write secret "test" to .env
+        env:
+          test: ${{ secrets.test }}
+        run: |
+          # fail early if secret not provided
+          if [ -z "$test" ]; then
+            echo "Secret 'test' is not set" >&2
+            exit 1
+          fi
+
+          # write the secret to .env without printing its value to logs
+          printf 'test=%s\n' "$test" > .env
+
+          # confirm file creation (the secret value itself is not printed)
+          echo ".env file created (secret value is masked in logs)."
+        shell: bash
